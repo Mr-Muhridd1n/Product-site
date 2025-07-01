@@ -3,7 +3,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import { FaBars, FaUser, FaHeart, FaShoppingCart } from "react-icons/fa";
 
-export const Header = () => {
+export const Header = ({ basketArr }) => {
   const [search, setSearch] = useState(null);
   return (
     <header className="mb-5">
@@ -70,10 +70,15 @@ export const Header = () => {
           </a>
           <a
             href="#"
-            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition relative"
           >
             <FaShoppingCart className="text-gray-700" size={20} />
             Savat
+            {basketArr > 0 && (
+              <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full px-2 py-0.5">
+                {basketArr}
+              </span>
+            )}
           </a>
         </div>
         <div className="flex-1 flex lg:hidden justify-center mt-5 container ml-auto mr-auto gap-3">
@@ -87,9 +92,20 @@ export const Header = () => {
           />
           <a
             href="#"
-            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition relative"
           >
             <FaHeart className="text-gray-700" size={20} />
+          </a>
+          <a
+            href="#"
+            className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition relative"
+          >
+            <FaShoppingCart className="text-gray-700" size={20} />
+            {basketArr > 0 && (
+              <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full px-2 py-0.5">
+                {basketArr}
+              </span>
+            )}
           </a>
         </div>
       </div>

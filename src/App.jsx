@@ -8,18 +8,23 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
   const [listCount, setListCount] = useState(10);
-  useEffect(() => {
+  const [basketArr, setBasketArr] = useState(0);
+
+  async function fetchProducts() {
     setLoading(true);
-    fetch("https://dummyjson.com/products?limit=194")
-      .then((data) => data.json())
-      .then((data) => {
-        setProducts(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
+    try {
+      const response = await fetch("https://dummyjson.com/products?limit=194");
+      const data = await response.json();
+      setProducts(data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
   if (loading) {
@@ -34,7 +39,7 @@ function App() {
   }
   return (
     <>
-      <Header></Header>
+      <Header basketArr={basketArr}></Header>
       <main>
         <Advertisement />
         <h2 className="container ml-auto mr-auto text-2xl font-bold">
@@ -45,7 +50,13 @@ function App() {
             products.products &&
             products.products
               .slice(0, listCount)
-              .map((product) => <List product={product} key={product.id} />)}
+              .map((product) => (
+                <List
+                  product={product}
+                  key={product.id}
+                  setBasketArr={setBasketArr}
+                />
+              ))}
         </ul>
         {products.products.length > listCount + 10 && (
           <button

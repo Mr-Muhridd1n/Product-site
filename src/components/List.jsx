@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 
-export const List = ({ product }) => {
+export const List = ({ product, setBasketArr }) => {
   const [like, setLike] = useState(0);
   const [basket, setBascet] = useState(0);
-
   return (
     <li
       key={product.id}
@@ -45,7 +44,41 @@ export const List = ({ product }) => {
           {product.rating.toFixed(1)} ({product.reviews.length} sharhlar)
         </span>
       </div>
-      <button className="btn btn-primary">Savatga</button>
+      {basket >= 1 ? (
+        <div className="flex justify-between bg-gray-400/40 rounded-xl items-center p-1">
+          <button
+            className="btn bg-white border-0 btn-sm text-sm"
+            onClick={() => {
+              setBascet(basket - 1);
+              setBasketArr((prop) => prop - 1);
+            }}
+          >
+            {" "}
+            &minus;{" "}
+          </button>
+          <span className="font-bold">{basket}</span>
+          <button
+            className="btn bg-white border-0 btn-sm text-sm"
+            onClick={() => {
+              setBascet(basket + 1);
+              setBasketArr((prop) => prop + 1);
+            }}
+          >
+            {" "}
+            &#43;
+          </button>
+        </div>
+      ) : (
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            setBascet(basket + 1);
+            setBasketArr((prop) => prop + 1);
+          }}
+        >
+          Savatga
+        </button>
+      )}
     </li>
   );
 };
