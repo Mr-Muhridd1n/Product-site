@@ -7,6 +7,7 @@ import { Advertisement } from "./components/Advertisement";
 function App() {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(null);
+  const [listCount, setListCount] = useState(10);
   useEffect(() => {
     setLoading(true);
     fetch("https://dummyjson.com/products?limit=194")
@@ -36,13 +37,26 @@ function App() {
       <Header></Header>
       <main>
         <Advertisement />
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 p-4">
+        <h2 className="container ml-auto mr-auto text-2xl font-bold">
+          Products: {listCount} / {products.products.length}
+        </h2>
+        <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 container ml-auto mr-auto mb-5">
           {products &&
             products.products &&
-            products.products.map((product) => (
-              <List product={product} key={product.id} />
-            ))}
+            products.products
+              .slice(0, listCount)
+              .map((product) => <List product={product} key={product.id} />)}
         </ul>
+        {products.products.length > listCount + 10 && (
+          <button
+            className="btn ml-auto mr-auto flex w-2/4 text-xl py-6 mb-5"
+            onClick={() => {
+              setListCount(listCount + 10);
+            }}
+          >
+            Yana ko'rsatish 10
+          </button>
+        )}
       </main>
       <Footer></Footer>
     </>
