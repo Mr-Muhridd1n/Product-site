@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 export const List = ({ product, setBasketArr }) => {
   const [like, setLike] = useState(0);
@@ -21,27 +22,32 @@ export const List = ({ product, setBasketArr }) => {
           }
         />
       </button>
-
-      <img
-        src={product.thumbnail}
-        alt={product.title}
-        className="w-full h-52 object-contain mb-4 transition duration-300 group-hover:scale-105"
-      />
-      <p className="text-gray-600 font-bold">
-        $
-        {(
-          product.price -
-          (product.price * product.discountPercentage) / 100
-        ).toFixed(2)}
-      </p>
-      <p className="line-through text-gray-500">${product.price}</p>
-      <p className="text-gray-600 mb-2 line-clamp-2">{product.description}</p>
-      <div className="flex items-center gap-2 text-sm font-semibold mb-3">
-        <FaStar className="text-yellow-500" />{" "}
-        <span className="opacity-90">
-          {product.rating.toFixed(1)} ({product.reviews.length} sharhlar)
-        </span>
-      </div>
+      <Link
+        to={`/product/${product.title.trim().replaceAll(" ", "-")}-${
+          product.id
+        }`}
+      >
+        <img
+          src={product.thumbnail}
+          alt={product.title}
+          className="w-full h-52 object-contain mb-4 transition duration-300 group-hover:scale-105"
+        />
+        <p className="text-gray-600 font-bold">
+          $
+          {(
+            product.price -
+            (product.price * product.discountPercentage) / 100
+          ).toFixed(2)}
+        </p>
+        <p className="line-through text-gray-500">${product.price}</p>
+        <p className="text-gray-600 mb-2 line-clamp-2">{product.description}</p>
+        <div className="flex items-center gap-2 text-sm font-semibold mb-3">
+          <FaStar className="text-yellow-500" />{" "}
+          <span className="opacity-90">
+            {product.rating.toFixed(1)} ({product.reviews.length} sharhlar)
+          </span>
+        </div>
+      </Link>
       {basket >= 1 ? (
         <div className="flex justify-between bg-gray-400/40 rounded-sm items-center p-1">
           <button
