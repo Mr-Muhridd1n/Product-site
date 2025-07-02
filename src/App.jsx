@@ -42,7 +42,7 @@ function App() {
       <Header basketArr={basketArr}></Header>
       <main>
         <Advertisement />
-        <h2 className="container ml-auto mr-auto text-2xl font-bold">
+        <h2 className="container ml-auto mr-auto text-2xl font-bold mb-3">
           Products: {listCount} / {products.products.length}
         </h2>
         <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 container ml-auto mr-auto mb-5">

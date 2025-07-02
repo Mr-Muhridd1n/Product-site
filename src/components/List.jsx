@@ -7,19 +7,17 @@ export const List = ({ product, setBasketArr }) => {
   return (
     <li
       key={product.id}
-      className="bg-blend-lighten rounded-lg hover:shadow-md p-4 flex flex-col group cursor-pointer"
+      className="bg-[#EFEFEF] rounded-lg hover:shadow-md p-4 flex flex-col group cursor-pointer"
     >
       <button
-        className="ml-auto"
+        className="ml-auto bg-white rounded-full btn w-9 h-9 p-2 flex items-center justify-center"
         onClick={() => {
           setLike(like == 0 ? 1 : 0);
         }}
       >
         <FaHeart
           className={
-            like == 0
-              ? "text-black cursor-pointer text-2xl"
-              : "text-red-700 cursor-pointer text-2xl"
+            like == 0 ? "text-black text-2xl" : "text-[#795BD5] text-2xl"
           }
         />
       </button>
@@ -45,9 +43,9 @@ export const List = ({ product, setBasketArr }) => {
         </span>
       </div>
       {basket >= 1 ? (
-        <div className="flex justify-between bg-gray-400/40 rounded-xl items-center p-1">
+        <div className="flex justify-between bg-gray-400/40 rounded-sm items-center p-1">
           <button
-            className="btn bg-white border-0 btn-sm text-sm"
+            className="btn bg-white border-0 btn-sm text-sm flex items-center w-7 h-7"
             onClick={() => {
               setBascet(basket - 1);
               setBasketArr((prop) => prop - 1);
@@ -58,7 +56,7 @@ export const List = ({ product, setBasketArr }) => {
           </button>
           <span className="font-bold">{basket}</span>
           <button
-            className="btn bg-white border-0 btn-sm text-sm"
+            className="btn bg-white border-0 btn-sm text-sm h-7 w-7"
             onClick={() => {
               setBascet(basket + 1);
               setBasketArr((prop) => prop + 1);
@@ -70,7 +68,7 @@ export const List = ({ product, setBasketArr }) => {
         </div>
       ) : (
         <button
-          className="btn btn-primary"
+          className="btn btn-primary btn-sm"
           onClick={() => {
             setBascet(basket + 1);
             setBasketArr((prop) => prop + 1);
