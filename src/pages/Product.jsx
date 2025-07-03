@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaHeart, FaStar, FaCheck } from "react-icons/fa";
 import { List } from "../components/List";
 
@@ -9,6 +9,15 @@ export const Product = ({ basketArr, setBasketArr }) => {
   const lastNumber = id.match(/\d+$/)?.[0];
   const [like, setLike] = useState(0);
   const [basket, setBascet] = useState(0);
+
+  const update = () => {
+    setLike(0);
+    setBascet(0);
+  };
+
+  useEffect(() => {
+    update();
+  }, [lastNumber]);
 
   const { products: product, loading } = useFetch(
     `https://dummyjson.com/products/${lastNumber}`
@@ -206,6 +215,7 @@ export const Product = ({ basketArr, setBasketArr }) => {
                         setBascet(basket + 1);
                         setBasketArr((prop) => prop + 1);
                       }}
+                      disabled={basket >= product.stock}
                     >
                       {" "}
                       &#43;
