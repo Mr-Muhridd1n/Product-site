@@ -20,7 +20,62 @@ export const Product = ({ basketArr, setBasketArr }) => {
       : null
   );
 
-  console.log(products);
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(<FaStar key={i} className="text-yellow-400 inline" />);
+      } else if (rating >= i - 0.5) {
+        stars.push(
+          <FaStar
+            key={i}
+            className="text-yellow-400"
+            style={{
+              clipPath: "inset(0 50% 0 0)",
+              marginRight: "-1em",
+            }}
+          />
+        );
+        stars.push(
+          <FaStar
+            key={i + "empty"}
+            className="text-gray-300"
+            style={{
+              clipPath: "inset(0 0 0 50%)",
+            }}
+          />
+        );
+      } else {
+        stars.push(<FaStar key={i} className="text-gray-300" />);
+      }
+    }
+    return stars;
+  };
+
+  function formatDate(dateInput, useUTC = true) {
+    const d = dateInput instanceof Date ? dateInput : new Date(dateInput);
+
+    const day = useUTC ? d.getUTCDate() : d.getDate();
+
+    const monthIndex = useUTC ? d.getUTCMonth() : d.getMonth();
+
+    const monthsUz = [
+      "Yanvar",
+      "Fevral",
+      "Mart",
+      "Aprel",
+      "May",
+      "Iyun",
+      "Iyul",
+      "Avgust",
+      "Sentabr",
+      "Oktabr",
+      "Noyabr",
+      "Dekabr",
+    ];
+
+    return `${day} ${monthsUz[monthIndex]}`;
+  }
 
   return (
     <>
@@ -30,39 +85,67 @@ export const Product = ({ basketArr, setBasketArr }) => {
             <div className="w-8/12 mr-5">
               <div className="">
                 <h1 className="text-3xl mb-3 font-bold">{product.title}</h1>
-                <div className="mb-4">
-                  ⭐ {product.rating.toFixed(1)} ({product.reviews.length}{" "}
-                  sharx)
-                </div>
-                <div className="flex gap-3">
-                  <figure className="bg-gray-400 w-6/12 rounded-2xl">
-                    <img
-                      src={
-                        product.images[1]
-                          ? product.images[1]
-                          : product.thumbnail
-                      }
-                      className="w-full"
-                      alt=""
-                    />
-                  </figure>
-                  <figure className="bg-gray-400 w-6/12 rounded-2xl">
-                    <img
-                      src={
-                        product.images[2]
-                          ? product.images[2]
-                          : product.thumbnail
-                      }
-                      className="w-full"
-                      alt=""
-                    />
-                  </figure>
+                <div className="mb-4 flex items-center gap-2">
+                  <span className="flex items-center">
+                    {renderStars(product.rating)}
+                  </span>
+                  <a href="" className="underline opacity-70">
+                    {product.rating.toFixed(1)} ({product.reviews.length} sharx)
+                  </a>
                 </div>
               </div>
+              <div className="flex gap-3 mb-5">
+                <figure className="bg-gray-400 w-6/12 rounded-2xl">
+                  <img
+                    src={
+                      product.images[1] ? product.images[1] : product.thumbnail
+                    }
+                    className="w-full"
+                    alt=""
+                  />
+                </figure>
+                <figure className="bg-gray-400 w-6/12 rounded-2xl">
+                  <img
+                    src={
+                      product.images[2] ? product.images[2] : product.thumbnail
+                    }
+                    className="w-full"
+                    alt={product.title}
+                  />
+                </figure>
+              </div>
+              {product.reviews && product.reviews.length > 0 && (
+                <div className="flex gap-5">
+                  {product.reviews.slice(0, 2).map((comment) => (
+                    <div
+                      className="w-full h-28 max-w-6/12 border-2 border-gray-500/40 rounded-2xl p-5"
+                      key={comment.id || comment.reviewerName}
+                    >
+                      <div className="flex justify-between mb-2">
+                        <span>
+                          <h4 className="font-bold">{comment.reviewerName}</h4>
+                          <p className="opacity-55">
+                            {formatDate(comment.date)}
+                          </p>
+                        </span>
+                        <span className="flex">
+                          {renderStars(comment.rating)}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="line-clamp-1">
+                          Izoh:{" "}
+                          <span className="opacity-60">{comment.comment}</span>
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="border-2 border-gray-400/50 w-4/12 rounded-3xl py-5.5 px-5 gap-5 flex flex-col">
-              <div className="bg-gray-500/40 p-5 rounded-3xl">
+            <div className="border-2 border-gray-400/40 w-4/12 rounded-3xl py-5.5 px-5 gap-5 flex flex-col">
+              <div className="bg-[#F0F2F5] hover:bg-gray-500/40 p-5 rounded-2xl">
                 <div className="max-w-9/12 cursor-pointer">
                   <p className="text-purple-600 font-semibold text-sm">
                     Uzum kartasi bilan to'lov amalga oshirilganda:
@@ -85,11 +168,11 @@ export const Product = ({ basketArr, setBasketArr }) => {
 
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <button className="btn bg-gray-500/40 rounded-2xl w-full max-w-10/12">
+                  <button className="btn bg-[#F0F2F5] hover:bg-gray-500/40 rounded-md w-full max-w-10/12">
                     1 klikda xarid qilish
                   </button>
                   <button
-                    className="bg-gray-500/40 rounded-2xl btn max-w-3/12 p-2 flex items-center justify-center"
+                    className="bg-[#F0F2F5] hover:bg-gray-500/40 rounded-md btn max-w-3/12 p-2 flex items-center justify-center"
                     onClick={() => {
                       setLike(like == 0 ? 1 : 0);
                     }}
@@ -105,9 +188,9 @@ export const Product = ({ basketArr, setBasketArr }) => {
                 </div>
 
                 {basket >= 1 ? (
-                  <div className="flex justify-between bg-gray-400/40 rounded-sm items-center p-1 w-full">
+                  <div className="flex justify-between bg-[#F0F2F5] hover:bg-gray-500/40 rounded-[12px] items-center p-4 w-full">
                     <button
-                      className="btn bg-white border-0 text-sm flex items-center w-7 h-7"
+                      className="btn shadow-none bg-transparent border-0 h-7 w-7 text-2xl"
                       onClick={() => {
                         setBascet(basket - 1);
                         setBasketArr((prop) => prop - 1);
@@ -118,7 +201,7 @@ export const Product = ({ basketArr, setBasketArr }) => {
                     </button>
                     <span className="font-bold">{basket}</span>
                     <button
-                      className="btn bg-white border-0 text-sm h-7 w-7"
+                      className="btn shadow-none bg-transparent border-0 h-7 w-7 text-2xl"
                       onClick={() => {
                         setBascet(basket + 1);
                         setBasketArr((prop) => prop + 1);
@@ -130,13 +213,13 @@ export const Product = ({ basketArr, setBasketArr }) => {
                   </div>
                 ) : (
                   <button
-                    className="btn btn-primary w-full"
+                    className="btn bg-[#7000FF] w-full text-white text-[18px] p-7 rounded-[12px]"
                     onClick={() => {
                       setBascet(basket + 1);
                       setBasketArr((prop) => prop + 1);
                     }}
                   >
-                    Savatga
+                    Savatga qo'shish
                   </button>
                 )}
               </div>
