@@ -81,8 +81,8 @@ export const Product = ({ basketArr, setBasketArr }) => {
     <>
       {product && (
         <section className="mb-5">
-          <div className="flex container ml-auto mr-auto">
-            <div className="w-8/12 mr-5">
+          <div className="flex container ml-auto mr-auto flex-col lg:flex-row">
+            <div className="w-full lg:w-8/12 mr-5">
               <div className="">
                 <h1 className="text-3xl mb-3 font-bold">{product.title}</h1>
                 <div className="mb-4 flex items-center gap-2">
@@ -95,7 +95,7 @@ export const Product = ({ basketArr, setBasketArr }) => {
                 </div>
               </div>
               <div className="flex gap-3 mb-5">
-                <figure className="bg-gray-400 w-6/12 rounded-2xl">
+                <figure className="bg-gray-400 md:w-6/12 rounded-2xl w-full">
                   <img
                     src={
                       product.images[1] ? product.images[1] : product.thumbnail
@@ -104,7 +104,7 @@ export const Product = ({ basketArr, setBasketArr }) => {
                     alt=""
                   />
                 </figure>
-                <figure className="bg-gray-400 w-6/12 rounded-2xl">
+                <figure className="bg-gray-400 w-6/12 rounded-2xl hidden md:inline-block">
                   <img
                     src={
                       product.images[2] ? product.images[2] : product.thumbnail
@@ -118,7 +118,7 @@ export const Product = ({ basketArr, setBasketArr }) => {
                 <div className="flex gap-5">
                   {product.reviews.slice(0, 2).map((comment) => (
                     <div
-                      className="w-full h-28 max-w-6/12 border-2 border-gray-500/40 rounded-2xl p-5"
+                      className="w-full max-w-6/12 border-2 border-gray-500/40 rounded-2xl p-5"
                       key={comment.id || comment.reviewerName}
                     >
                       <div className="flex justify-between mb-2">
@@ -144,7 +144,7 @@ export const Product = ({ basketArr, setBasketArr }) => {
               )}
             </div>
 
-            <div className="border-2 border-gray-400/40 w-4/12 rounded-3xl py-5.5 px-5 gap-5 flex flex-col">
+            <div className="border-2 border-gray-400/40 w-full lg:max-w-4/12 rounded-3xl py-5.5 px-5 gap-5 flex flex-col mt-4 lg:mt-0">
               <div className="bg-[#F0F2F5] hover:bg-gray-500/40 p-5 rounded-2xl">
                 <div className="max-w-9/12 cursor-pointer">
                   <p className="text-purple-600 font-semibold text-sm">
