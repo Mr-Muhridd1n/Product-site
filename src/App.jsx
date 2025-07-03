@@ -7,7 +7,9 @@ import { Product } from "./pages/Product";
 
 function App() {
   const [basketArr, setBasketArr] = useState(0);
-  const { products, loading } = useFetch("https://dummyjson.com/products");
+  const { products, loading } = useFetch(
+    "https://dummyjson.com/products?limit=194"
+  );
 
   if (loading) {
     return (
