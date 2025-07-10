@@ -192,7 +192,6 @@ export const Basket = () => {
           </div>
         </div>
 
-        {/* Order Summary */}
         <div className="lg:col-span-1">
           <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-6">
             <h3 className="font-semibold text-gray-900 mb-4">Buyurtmangiz</h3>
