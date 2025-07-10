@@ -2,9 +2,12 @@ import { useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaChevronDown } from "react-icons/fa";
 import { FaBars, FaUser, FaHeart, FaShoppingCart } from "react-icons/fa";
+import { useGlobalContext } from "../hooks/useGlobalContext";
+import { Link } from "react-router-dom";
 
-export const Header = ({ basketArr }) => {
+export const Header = () => {
   const [search, setSearch] = useState(null);
+  const { allProduct } = useGlobalContext();
   return (
     <header className="mb-5">
       <div className="lg:bg-gray-300 w-full py-1 text-sm">
@@ -40,9 +43,9 @@ export const Header = ({ basketArr }) => {
       </div>
       <div className="bg-white shadow">
         <div className="container mx-auto lg:flex items-center py-3 gap-6 hidden">
-          <a href="#" className="text-2xl font-bold text-purple-700">
+          <Link to="/" className="text-2xl font-bold text-purple-700">
             Uzum Market
-          </a>
+          </Link>
           <button className="flex items-center gap-2 bg-purple-100 text-purple-700 px-4 py-2 rounded font-medium hover:bg-purple-200 transition">
             <FaBars className="text-purple-700" size={20} />
             Katalog
@@ -68,18 +71,18 @@ export const Header = ({ basketArr }) => {
             <FaHeart className="text-gray-700" size={20} />
             Saqlangan
           </a>
-          <a
-            href="#"
+          <Link
+            to="/basket"
             className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition relative"
           >
             <FaShoppingCart className="text-gray-700" size={20} />
             Savat
-            {basketArr > 0 && (
+            {allProduct > 0 && (
               <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full px-2 py-0.5">
-                {basketArr}
+                {allProduct}
               </span>
             )}
-          </a>
+          </Link>
         </div>
         <div className="flex-1 flex lg:hidden justify-center mt-5 container ml-auto mr-auto gap-3">
           <input
@@ -101,9 +104,9 @@ export const Header = ({ basketArr }) => {
             className="flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-100 transition relative"
           >
             <FaShoppingCart className="text-gray-700" size={20} />
-            {basketArr > 0 && (
+            {allProduct > 0 && (
               <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs rounded-full px-2 py-0.5">
-                {basketArr}
+                {allProduct}
               </span>
             )}
           </a>

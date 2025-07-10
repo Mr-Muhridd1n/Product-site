@@ -1,23 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useFetch } from "../hooks/useFetch";
-import { useEffect, useState } from "react";
 import { FaHeart, FaStar, FaCheck } from "react-icons/fa";
 import { List } from "../components/List";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 
-export const Product = ({ basketArr, setBasketArr }) => {
+export const Product = () => {
   const { id } = useParams();
   const lastNumber = id.match(/\d+$/)?.[0];
-  const [like, setLike] = useState(0);
-  const [basket, setBascet] = useState(0);
-
-  const update = () => {
-    setLike(0);
-    setBascet(0);
-  };
-
-  useEffect(() => {
-    update();
-  }, [lastNumber]);
+  const { card, like, dispatch } = useGlobalContext();
 
   const { products: product, loading } = useFetch(
     `https://dummyjson.com/products/${lastNumber}`
@@ -28,6 +18,9 @@ export const Product = ({ basketArr, setBasketArr }) => {
       ? `https://dummyjson.com/products/category/${product.category}`
       : null
   );
+
+  const isAdded = card.find((item) => product.id == item.id);
+  const isLike = like.find((item) => product.id == item.id);
 
   const renderStars = (rating) => {
     const stars = [];
@@ -183,39 +176,48 @@ export const Product = ({ basketArr, setBasketArr }) => {
                   <button
                     className="bg-[#F0F2F5] hover:bg-gray-500/40 rounded-md btn max-w-3/12 p-2 flex items-center justify-center"
                     onClick={() => {
-                      setLike(like == 0 ? 1 : 0);
+                      dispatch({ type: "ADD_LIKE", payload: product.id });
                     }}
                   >
                     <FaHeart
-                      className={
-                        like == 0
-                          ? "text-black text-2xl"
-                          : "text-[#795BD5] text-2xl"
-                      }
+                      className={`text-2xl ${
+                        isLike ? "text-[#795BD5]" : "text-black"
+                      }`}
                     />
                   </button>
                 </div>
 
-                {basket >= 1 ? (
+                {isAdded ? (
                   <div className="flex justify-between bg-[#F0F2F5] hover:bg-gray-500/40 rounded-[12px] items-center p-4 w-full">
                     <button
                       className="btn shadow-none bg-transparent border-0 h-7 w-7 text-2xl"
                       onClick={() => {
-                        setBascet(basket - 1);
-                        setBasketArr((prop) => prop - 1);
+                        isAdded
+                          ? isAdded.amound > 1
+                            ? dispatch({
+                                type: "DEL_PRODUCT_ID",
+                                payload: product.id,
+                              })
+                            : dispatch({
+                                type: "DEL_PRODUCT",
+                                payload: product.id,
+                              })
+                          : "";
                       }}
                     >
                       {" "}
                       &minus;{" "}
                     </button>
-                    <span className="font-bold">{basket}</span>
+                    <span className="font-bold">{isAdded.amound}</span>
                     <button
                       className="btn shadow-none bg-transparent border-0 h-7 w-7 text-2xl"
                       onClick={() => {
-                        setBascet(basket + 1);
-                        setBasketArr((prop) => prop + 1);
+                        dispatch({
+                          type: "ADD_PRODUCT_ID",
+                          payload: product.id,
+                        });
                       }}
-                      disabled={basket >= product.stock}
+                      disabled={isAdded.amound >= product.stock}
                     >
                       {" "}
                       &#43;
@@ -225,8 +227,10 @@ export const Product = ({ basketArr, setBasketArr }) => {
                   <button
                     className="btn bg-[#7000FF] w-full text-white text-[18px] p-7 rounded-[12px]"
                     onClick={() => {
-                      setBascet(basket + 1);
-                      setBasketArr((prop) => prop + 1);
+                      dispatch({
+                        type: "ADD_PRODUCT",
+                        payload: { ...product, amound: 1 },
+                      });
                     }}
                   >
                     Savatga qo'shish
@@ -251,11 +255,7 @@ export const Product = ({ basketArr, setBasketArr }) => {
           <h2 className="text-2xl font-bold mb-3">O'xshash maxsulotlar</h2>
           <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 ml-auto mr-auto mb-5">
             {products.products.map((_product) => (
-              <List
-                product={_product}
-                key={_product.id}
-                setBasketArr={setBasketArr}
-              />
+              <List product={_product} key={_product.id} />
             ))}
           </ul>
         </section>

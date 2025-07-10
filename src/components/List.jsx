@@ -1,10 +1,14 @@
 import { useState } from "react";
 import { FaHeart, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useGlobalContext } from "../hooks/useGlobalContext";
 
-export const List = ({ product, setBasketArr }) => {
-  const [like, setLike] = useState(0);
-  const [basket, setBascet] = useState(0);
+export const List = ({ product }) => {
+  const { card, like, dispatch } = useGlobalContext();
+
+  const isAdded = card.find((item) => product.id == item.id);
+  const isLike = like.find((item) => product.id == item.id);
+
   return (
     <li
       key={product.id}
@@ -13,13 +17,11 @@ export const List = ({ product, setBasketArr }) => {
       <button
         className="ml-auto bg-white rounded-full btn w-9 h-9 p-2 flex items-center justify-center"
         onClick={() => {
-          setLike(like == 0 ? 1 : 0);
+          dispatch({ type: "ADD_LIKE", payload: product.id });
         }}
       >
         <FaHeart
-          className={
-            like == 0 ? "text-black text-2xl" : "text-[#795BD5] text-2xl"
-          }
+          className={`text-2xl ${isLike ? "text-[#795BD5]" : "text-black"}`}
         />
       </button>
       <Link
@@ -48,24 +50,26 @@ export const List = ({ product, setBasketArr }) => {
           </span>
         </div>
       </Link>
-      {basket >= 1 ? (
+      {isAdded ? (
         <div className="flex justify-between bg-gray-400/40 rounded-sm items-center p-1">
           <button
             className="btn bg-white border-0 btn-sm text-sm flex items-center w-7 h-7"
             onClick={() => {
-              setBascet(basket - 1);
-              setBasketArr((prop) => prop - 1);
+              isAdded
+                ? isAdded.amound > 1
+                  ? dispatch({ type: "DEL_PRODUCT_ID", payload: product.id })
+                  : dispatch({ type: "DEL_PRODUCT", payload: product.id })
+                : "";
             }}
           >
             {" "}
             &minus;{" "}
           </button>
-          <span className="font-bold">{basket}</span>
+          <span className="font-bold">{isAdded ? isAdded.amound : 1}</span>
           <button
             className="btn bg-white border-0 btn-sm text-sm h-7 w-7"
             onClick={() => {
-              setBascet(basket + 1);
-              setBasketArr((prop) => prop + 1);
+              dispatch({ type: "ADD_PRODUCT_ID", payload: product.id });
             }}
           >
             {" "}
@@ -76,8 +80,10 @@ export const List = ({ product, setBasketArr }) => {
         <button
           className="btn btn-primary btn-sm"
           onClick={() => {
-            setBascet(basket + 1);
-            setBasketArr((prop) => prop + 1);
+            dispatch({
+              type: "ADD_PRODUCT",
+              payload: { ...product, amound: 1 },
+            });
           }}
         >
           Savatga
